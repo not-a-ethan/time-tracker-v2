@@ -1,5 +1,12 @@
 import { sql } from "@/utils/postgres";
 
+/*
+Aguments:
+
+type: type of account | ["sso", "credentials"]
+provider: sso provider or username
+ssoId: Id of external account if account uses sso
+*/
 export function accountExists(type: string, provider: string, ssoId: number): boolean {
     let query;
 
