@@ -1,1 +1,5 @@
-# time-tracker-v2
+# Time Tracker V2
+
+A OSS time tracker. This can be used to track how much time is spent on diffrent activited.
+
+V1: https://github.com/not-a-ethan/time-tracker
