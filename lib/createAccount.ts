@@ -1,4 +1,5 @@
 import { sql } from "@/utils/postgres";
+import { accountExists } from "./accountExists";
 
 /*
 Aguments:
@@ -10,6 +11,11 @@ sso_pro: sso source (ex: github) | null if not using sso
 sso_id: id of sso account (ex: github id) | null if not using sso
 */
 export function createAccount(type: string, username: string, password: string|null, sso_pro: string|null, sso_id: number|null): boolean {
+
+    if (accountExists(type, sso_pro ? sso_pro : username, sso_id)) {
+        return false;
+    }
+
     let query;
     
     if (type === "sso") {
