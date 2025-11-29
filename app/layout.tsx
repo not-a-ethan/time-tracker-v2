@@ -1,4 +1,4 @@
-import "./styles/global.css"
+import "./styles/global.css";
 import { Viewport } from "next";
 
 import { Providers } from "./providers";
@@ -25,4 +25,4 @@ export default function RootLayout({
       </body>
     </html>
   );
-}
+};

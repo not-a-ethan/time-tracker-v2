@@ -8,4 +8,4 @@ export default function Home() {
       <p>A time tracker is a program that keeps track of how much time you spend on diffrent activities.</p>
     </>
   );
-}
+};
