@@ -40,5 +40,36 @@ export async function POST(req: NextRequest) {
         );
     };
 
-    // DB stuff
+    if (description !== null) {
+        try {
+            await sql`INSERT INTO projects (name, description, color, owner, collaborators) VALUES (${name}, ${description}, ${color}, ${authStatus["userId"]}, ${authStatus["userId"]});`;
+        } catch (e) {
+            console.error(e);
+
+            return NextResponse.json(
+                {
+                    "error": "Something went wrong creating project"
+                },
+                { status: 500 }
+            );
+        };
+    } else {
+        try {
+            await sql`INSERT INTO projects (name, color, owner, collaborators) VALUES (${name}, ${color}, ${authStatus["userId"]}, ${authStatus["userId"]});`;
+        } catch (e) {
+            console.error(e);
+
+            return NextResponse.json(
+                {
+                    "error": "Something went wrong creating project"
+                },
+                { status: 500 }
+            );
+        };
+    };
+
+    return NextResponse.json(
+        {},
+        { status: 200 }
+    );
 };

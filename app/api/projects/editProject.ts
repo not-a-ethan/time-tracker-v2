@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { apiAuthCheck } from "@/helpers/authStatus";
+import { isProjectColaborator } from "@/helpers/project/isColaborator";
 import { sql } from "@/utils/postgres";
 
 import { ApiAuth } from "@/type";
@@ -34,6 +35,14 @@ export async function PUT(req: NextRequest) {
     };
 
     // VALIDATE THAT USER OWNS PROJECT
+    if (!(await isProjectColaborator(authStatus["userId"], projectId))) {
+        return NextResponse.json(
+            {
+                "error": "You are not a colaborater on the project"
+            },
+            { status: 403 }
+        );
+    };
 
     // Allowed values is "name", "desc", "color"
     const types: string[] = [];
@@ -60,15 +69,41 @@ export async function PUT(req: NextRequest) {
     };
 
     if (types.includes("name")) {
-        // Change name
+        try {
+            await sql`UPDATE projects SET name=${newName} WHERE id=${projectId};`;
+        } catch (e) {
+            return NextResponse.json(
+                {
+                    "error": "Something went wrong changing name. Nothing else was changed"
+                },
+                { status: 500 }
+            );
+        };
     };
 
     if (types.includes("desc")) {
-        // Change description
+        try {
+            await sql`UPDATE projects SET description=${newDescription} WHERE id=${projectId};`;
+        } catch (e) {
+            return NextResponse.json(
+                {
+                    "error": "Something went wrong changing descrption. The name was changed (if applicable) and no more."
+                }
+            )
+        }
     };
 
     if (types.includes("color")) {
-        // Change color
+        try {
+            await sql`UPDATE projects SET color=${newColor} WHERE id=${projectId};`;
+        } catch (e) {
+            return NextResponse.json(
+                {
+                    "error": "Something went wrong changing color. The name and description was changed (if applicable)."
+                },
+                { status: 500 }
+            );
+        };
     };
 
     return NextResponse.json(

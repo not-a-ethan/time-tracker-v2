@@ -60,5 +60,36 @@ export async function POST(req: NextRequest) {
         );
     };
 
-    // create the entry.
+    if (endTime === null) {
+        try {
+            await sql`INSERT INTO timeEntries (projectId, name, startTime, owner) VALUES (${project}, ${name}, ${startTime}, ${authStatus["userId"]});`;
+        } catch (e) {
+            console.error(e);
+
+            return NextResponse.json(
+                {
+                    "error": "Something went wrong creating time entry"
+                },
+                { status: 500 }
+            );
+        };
+    } else {
+        try {
+            await sql`INSERT INTO timeEntries (projectId, name, startTime, endTime, owner) VALUES (${project}, ${name}, ${startTime}, ${endTime}, ${authStatus["userId"]});`;
+        } catch (e) {
+            console.error(e);
+
+            return NextResponse.json(
+                {
+                    "error": "Something went wrong creating time entry"
+                },
+                { status: 500 }
+            );
+        };
+    };
+
+    return NextResponse.json(
+        {},
+        { status: 200 }
+    );
 };

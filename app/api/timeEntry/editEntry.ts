@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { apiAuthCheck } from "@/helpers/authStatus";
+import { getTimeInfo } from "@/helpers/time/getEntryData";
+import { isTimeOwner } from "@/helpers/time/isOwner";
+import { isProjectOwner } from "@/helpers/project/isOwner";
 import { sql } from "@/utils/postgres";
 
-import { ApiAuth } from "@/type";
+import { ApiAuth, DatabaseTimeEntriesTable } from "@/type";
 
 export async function PUT(req: NextRequest) {
     const authStatus: ApiAuth = await apiAuthCheck(req);
@@ -18,10 +21,20 @@ export async function PUT(req: NextRequest) {
     };
 
     const body = await req.json();
+    const timeId: number|null = body["id"];
     const newName: string|null = body["name"];
     const newProject: number|null = body["project"];
     const newStartTime: number|null = body["startTime"];
     const newEndTime: number|null = body["endTime"];
+
+    if (timeId === null || Number.isNaN(timeId) || timeId <= 0) {
+        return NextResponse.json(
+            {
+                "error": "You need a valid time id"
+            },
+            { status: 400 }
+        );
+    };
 
     // Valid values: "name", "project", "start", "end"
     const types: string[] = [];
@@ -53,12 +66,56 @@ export async function PUT(req: NextRequest) {
 
     // VALIDATE user owns time entry
 
-    if (types.includes("name")) {
+    const timeEntryData: DatabaseTimeEntriesTable = await getTimeInfo(authStatus["userId"], timeId);
 
+    if (!(isTimeOwner(authStatus["userId"], timeId) || isProjectOwner(authStatus["userId"], timeEntryData["projectId"]))) {
+        return NextResponse.json(
+            {
+                "error": "You do not own the time entry or the project"
+            },
+            { status: 403 }
+        );
+    };
+
+    if (types.includes("name")) {
+        try {
+            await sql`UPDATE timeEntries SET name=${newName} WHERE id=${timeId};`;
+        } catch (e) {
+            console.error(e);
+
+            return NextResponse.json(
+                {
+                    "error": "Something went wrong changing name. Nothing else was changed"
+                },
+                { status: 500 }
+            );
+        };
     };
 
     if (types.includes("project")) {
         // Check that user owns new project
+        if (!(await isProjectOwner(authStatus["userId"], newProject))) {
+            return NextResponse.json(
+                {
+                    "error": "You do not own the new project"
+                },
+                { status: 403 }
+            );
+        };
+
+        // Changes project
+        try {
+            await sql`UPDATE timeEntries SET projectId=${newProject} WHERE id=${timeId};`;
+        } catch (e) {
+            console.error(e);
+
+            return NextResponse.json(
+                {
+                    "error": "Something went wrong changing the project. Only the name was changed and nothing else (if applicable)"
+                },
+                { status: 500 }
+            );
+        };
     };
 
     if (types.includes("start")) {

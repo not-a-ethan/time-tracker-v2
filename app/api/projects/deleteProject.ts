@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { apiAuthCheck } from "@/helpers/authStatus";
+import { isProjectOwner } from "@/helpers/project/isOwner";
 import { sql } from "@/utils/postgres";
 
 import { ApiAuth } from "@/type";
@@ -30,8 +31,47 @@ export async function DELETE(req: NextRequest) {
     };
 
     // Check project owner,
-    // oihaentioewdsuhgnjrswoeikgjm
+    if (!(await isProjectOwner(authStatus["userId"], id))) {
+        return NextResponse.json(
+            {
+                "error": "You do not own the project"
+            },
+            { status: 403 }
+        );
+    };
+
+    // Delete time entries for project
+
+    try {
+        await sql`DELETE FROM timeEntries WHERE projectId=${id};`;
+    } catch (e) {
+        console.error(e);
+
+        return NextResponse.json(
+            {
+                "error": "Something went wrong deleting time entries"
+            },
+            { status: 500 }
+        );
+    };
 
     // Delete project
-    // woeihtngewoisjtmgnoiwesjtmfopewsifrjkm
+    
+    try {
+        await sql`DELETE FROM projects WHERE id=${id};`;
+    } catch (e) {
+        console.error(e);
+
+        return NextResponse.json(
+            {
+                "error": "Somethign went wrong deleting project"
+            },
+            { status: 500 }
+        );
+    };
+
+    return NextResponse.json(
+        {},
+        { status: 200 }
+    );
 };
