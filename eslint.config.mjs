@@ -123,6 +123,7 @@ export default defineConfig([globalIgnores([
             }],
 
             "newlines-between": "always",
+            "semi": "off"
         }],
 
         "react/self-closing-comp": "warn",
