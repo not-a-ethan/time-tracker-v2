@@ -2,8 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { apiAuthCheck } from "@/helpers/authStatus";
 import { sql } from "@/utils/postgres";
+import { isProjectColaborator } from "@/helpers/project/isColaborator";
+import { isProjectOwner } from "@/helpers/project/isOwner";
 
-import { ApiAuth } from "@/type";
+import { ApiAuth, DatabaseTimeEntriesTable } from "@/type";
 
 export async function GET(req: NextRequest) {
     const authStatus: ApiAuth = await apiAuthCheck(req);
@@ -18,14 +20,48 @@ export async function GET(req: NextRequest) {
     };
 
     const searchParams = req.nextUrl.searchParams;
-    const projectId: number= Number(searchParams.get("projectId"));
+    const projectId: number|null = Number(searchParams.get("projectId"));
 
-    if (Number.isNaN(projectId)) {
-        // get all entries for user
+    if (projectId === null || Number.isNaN(projectId)) {
+        try {
+            const items: DatabaseTimeEntriesTable[] = await sql`SELECT * FROM timeEntries WHERE owner=${authStatus["userId"]};`;
+
+            return NextResponse.json(
+                {
+                    "items": items
+                },
+                { status: 200 }
+            );
+        } catch (e) {
+            console.error(e);
+
+            return NextResponse.json(
+                {
+                    "error": "Something went wrong trying to get entries"
+                },
+                { status: 500 }
+            );
+        };
     } else if (projectId >= 0) {
-        // get all for specific project
+        try {
+            const items: DatabaseTimeEntriesTable[] = await sql`SELECT * FROM timeEntries WHERE projectId=${projectId};`;
 
-        // Check if user owns project
+            return NextResponse.json(
+                {
+                    "items": items
+                },
+                { status: 200 }
+            );
+        } catch (e) {
+            console.error(e);
+
+            return NextResponse.json(
+                {
+                    "error": "Something went wrong with getting time entries"
+                },
+                { status: 500 }
+            );
+        };
     } else {
         return NextResponse.json(
             {
