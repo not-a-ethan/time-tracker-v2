@@ -7,7 +7,7 @@ import { isProjectOwner } from "@/helpers/project/isOwner";
 
 import { ApiAuth, DatabaseTimeEntriesTable } from "@/type";
 
-export async function GET(req: NextRequest) {
+export async function GET(req: NextRequest): Promise<NextResponse> {
     const authStatus: ApiAuth = await apiAuthCheck(req);
 
     if (!authStatus["auth"]) {
@@ -43,6 +43,15 @@ export async function GET(req: NextRequest) {
             );
         };
     } else if (projectId >= 0) {
+        if (!(await isProjectColaborator(authStatus["userId"], projectId) || await isProjectOwner(authStatus["userId"], projectId))) {
+            return NextResponse.json(
+                {
+                    "error": "You do not own or collaberate on that project"
+                },
+                { status: 403 }
+            );
+        };
+
         try {
             const items: DatabaseTimeEntriesTable[] = await sql`SELECT * FROM timeEntries WHERE projectId=${projectId};`;
 

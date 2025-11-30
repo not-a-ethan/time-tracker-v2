@@ -6,7 +6,7 @@ import { sql } from "@/utils/postgres";
 
 import { ApiAuth } from "@/type";
 
-export async function PUT(req: NextRequest) {
+export async function PUT(req: NextRequest): Promise<NextResponse> {
     const authStatus: ApiAuth = await apiAuthCheck(req);
 
     if (!authStatus["auth"]) {

@@ -8,7 +8,7 @@ import { sql } from "@/utils/postgres";
 
 import { ApiAuth, DatabaseTimeEntriesTable } from "@/type";
 
-export async function PUT(req: NextRequest) {
+export async function PUT(req: NextRequest): Promise<NextResponse> {
     const authStatus: ApiAuth = await apiAuthCheck(req);
 
     if (!authStatus["auth"]) {
@@ -43,15 +43,15 @@ export async function PUT(req: NextRequest) {
         types.push("name");
     };
 
-    if (newProject !== null && !Number.isNaN(newProject) && newProject >= 0) {
+    if (newProject !== null && !Number.isNaN(newProject) && newProject > 0) {
         types.push("project");
     };
 
-    if (newStartTime !== null && !Number.isNaN(newStartTime) && newStartTime >= 0) {
+    if (newStartTime !== null && !Number.isNaN(newStartTime) && newStartTime > 0) {
         types.push("start");
     };
 
-    if (newEndTime !== null && !Number.isNaN(newEndTime) && newEndTime >= 0) {
+    if (newEndTime !== null && !Number.isNaN(newEndTime) && newEndTime > 0) {
         types.push("end");
     };
 
@@ -93,11 +93,20 @@ export async function PUT(req: NextRequest) {
     };
 
     if (types.includes("project")) {
+        if (newProject === null || Number.isNaN(newProject) || newProject <= 0) {
+            return NextResponse.json(
+                {
+                    "error": "You did not include a valid project id"
+                },
+                { status: 500 }
+            );
+        };
+
         // Check that user owns new project
         if (!(await isProjectOwner(authStatus["userId"], newProject))) {
             return NextResponse.json(
                 {
-                    "error": "You do not own the new project"
+                    "error": "You do not own the new project. Only the name was changed and nothing else (if applicable)"
                 },
                 { status: 403 }
             );
@@ -119,11 +128,132 @@ export async function PUT(req: NextRequest) {
     };
 
     if (types.includes("start")) {
+        if (newStartTime === null || Number.isNaN(newStartTime) || newStartTime <= 0) {
+            return NextResponse.json(
+                {
+                    "error": "That is not a valid start time"
+                },
+                { status: 400 }
+            );
+        };
+
         // Check that start time is before end time
+        if (types.includes("end")) {
+            if (newEndTime === null || Number.isNaN(newEndTime) || newEndTime <= 0) {
+                return NextResponse.json(
+                    {
+                        "error": "That is not a valid end time"
+                    },
+                    { status: 400 }
+                );
+            };
+
+            if (newEndTime <= newStartTime) {
+                return NextResponse.json(
+                    {
+                        "error": "You need to start before you can finish. Name and project was changed and nothing else (if applicable)"
+                    },
+                    { status: 400 }
+                );
+            };
+
+            try {
+                await sql`UPDATE timeEntries SET startTime=${newStartTime} WHERE id=${timeId};`;
+            } catch (e) {
+                console.error(e);
+
+                return NextResponse.json(
+                    {
+                        "error": "Something went wrong changing start time. Name and project was changed and nothing else (if applicable)"
+                    },
+                    { status: 500 }
+                );
+            };
+        } else {
+            if (timeEntryData["endTime"] !== null && newStartTime >= timeEntryData["endTime"]) {
+                return NextResponse.json(
+                    {
+                        "error": "You cant make the start time after the end time. Name and project was changed and nothing else (if applicable)"
+                    },
+                    { status: 400 }
+                );
+            };
+
+            try {
+                await sql`UPDATE timeEntries SET startTime=${newStartTime} WHERE id=${timeId};`;
+            } catch (e) {
+                return NextResponse.json(
+                    {
+                        "error": "Something went wrong changing start time. Name and project was changed and nothing else (if applicable)"
+                    },
+                    { status: 500 }
+                );
+            };
+        };
     };
 
     if (types.includes("end")) {
-        // Check that end time is after start time
+        if (newEndTime === null || Number.isNaN(newEndTime) || newEndTime <= 0) {
+            return NextResponse.json(
+                {
+                    "error": "That is not a valid end time"
+                },
+                { status: 400 }
+            );
+        };
+
+        if (types.includes("start")) {
+            if (newStartTime === null || Number.isNaN(newStartTime) || newStartTime <= 0) {
+                return NextResponse.json(
+                    {
+                        "error": "That is not a valid start time"
+                    },
+                    { status: 400 }
+                );
+            };
+
+            if (newStartTime >= newEndTime) {
+                return NextResponse.json(
+                    {
+                        "error": "The end time needs to be after the start time. Everything else was changed (if applicable)."
+                    },
+                    { status: 400 }
+                );
+            };
+
+            try {
+                await sql`UPDATE timeEntries SET endTime=${newEndTime} WHERE id=${timeId};`;
+            } catch (e) {
+                return NextResponse.json(
+                    {
+                        "error": "Something went wrong changing end time. Everything else was changed (if applicable)."
+                    },
+                    { status: 500 }
+                );
+            };
+        } else {
+            if (timeEntryData["startTime"] >= newEndTime) {
+                return NextResponse.json(
+                    {
+                        "error": "The end time needs to be after the start time. Everything else was changed (if applicable)."
+                    },
+                    { status: 400 }
+                );
+            };
+
+            try {
+                await sql`UPDATE timeEntries SET endTime=${newEndTime} WHERE id=${timeId};`;
+            } catch (e) {
+                console.error(e);
+
+                return NextResponse.json(
+                    {
+                        "error": "Something went wrong changing end time. Everything else was changed (if applicable)."
+                    },
+                    { status: 500 }
+                );
+            };
+        };
     };
 
     return NextResponse.json(
