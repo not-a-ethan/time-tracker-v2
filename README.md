@@ -14,8 +14,7 @@ This project uses a PostgreSQL databse. Below is the quries to create all the ta
 
 ```sql
 CREATE TABLE "users" (
-  "id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "users_id_seq"),
-  "githubId" integer NOT NULL UNIQUE,
+  "id" integer PRIMARY KEY,
   "name" text NOT NULL
 );
 ```

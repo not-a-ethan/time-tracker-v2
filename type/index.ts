@@ -1,6 +1,5 @@
 export interface DatabaseUserTable {
     "id": number,
-    "githubId": number,
     "name": string
 };
 
