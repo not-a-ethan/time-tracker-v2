@@ -20,12 +20,12 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
 
     const body = await req.json();
 
-    const projectId: number|null = body["id"];
-    const newName: string|null = body["name"];
-    const newDescription: string|null = body["description"];
-    const newColor: string|null = body["color"];
+    const projectId: number|null|undefined = body["id"];
+    const newName: string|null|undefined = body["name"];
+    const newDescription: string|null|undefined = body["description"];
+    const newColor: string|null|undefined = body["color"];
 
-    if (!projectId || Number.isNaN(projectId) || projectId <= 0) {
+    if (projectId === null || projectId === undefined || Number.isNaN(projectId) || projectId <= 0) {
         return NextResponse.json(
             {
                 "error": "You need a valid project id"
@@ -47,15 +47,15 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
     // Allowed values is "name", "desc", "color"
     const types: string[] = [];
 
-    if (newName !== null && newName && newName.trim().length !== 0) {
+    if (newName !== null && newName !== undefined && newName && newName.trim().length !== 0) {
         types.push("name");
     };
 
-    if (newDescription !== null && newDescription && newDescription.trim().length !== 0) {
+    if (newDescription !== null && newDescription !== undefined && newDescription && newDescription.trim().length !== 0) {
         types.push("desc");
     };
 
-    if (newColor !== null && newColor && newColor.trim().length !== 0) {
+    if (newColor !== null && newColor !== undefined && newColor && newColor.trim().length !== 0) {
         types.push("color");
     };
 

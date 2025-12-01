@@ -10,7 +10,7 @@ import { Skeleton } from "@heroui/skeleton";
 export function CreateProject(props: any) {
     const { onOpen, isOpen, onOpenChange } = useDisclosure();
 
-    if (props.skelton) {
+    if (props.skeleton) {
         return (
             <Skeleton>
                 <Button>Create Project</Button>

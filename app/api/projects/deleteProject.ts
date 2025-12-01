@@ -19,9 +19,9 @@ export async function DELETE(req: NextRequest): Promise<NextResponse> {
     };
 
     const body = await req.json();
-    const id: number|null = Number(body["id"]);
+    const id: number|null|undefined = Number(body["id"]);
 
-    if (id === null || Number.isNaN(id) || id <= 0) {
+    if (id === null || id === undefined || Number.isNaN(id) || id <= 0) {
         return NextResponse.json(
             {
                 "error": "You need a valid project id"

@@ -18,9 +18,9 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
     };
 
     const body = await req.json();
-    const newName: string|null = body["name"];
+    const newName: string|null|undefined = body["name"];
 
-    if (!newName || newName === null || newName.trim().length === 0) {
+    if (!newName || newName === null || newName === undefined || newName.trim().length === 0) {
         return NextResponse.json(
             {
                 "error": "You need a name that is not blank"

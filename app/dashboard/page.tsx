@@ -4,9 +4,7 @@ import { useRouter } from "next/navigation";
 
 import { useSession } from "next-auth/react";
 
-import { useState } from "react";
-
-import { CreateTimeItem } from "./createItem";
+import { CreateTimer } from "./createTimer";
 import { CreateProject } from "./createProject";
 
 import { getAPI } from "@/helpers/getAPI";
@@ -35,7 +33,7 @@ export default function Dashboard() {
             <>
                 <h1>Dashboard</h1>
 
-                <CreateTimeItem skelton="true" />
+                <CreateTimer skelton="true" />
 
                 <CreateProject skelton="true" />
             </>
@@ -47,9 +45,9 @@ export default function Dashboard() {
             <>
                 <h1>Dashboard</h1>
 
-                <CreateTimeItem skelton="true" />
+                <CreateTimer skeleton="true" />
 
-                <CreateProject skelton="true" />
+                <CreateProject skeleton="true" />
             </>
         );
     };
@@ -60,7 +58,7 @@ export default function Dashboard() {
         <>
             <h1>Dashboard</h1>
 
-            <CreateTimeItem projects={projects} />
+            <CreateTimer projects={projects} />
 
             <CreateProject />
         </>
