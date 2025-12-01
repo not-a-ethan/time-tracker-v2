@@ -80,7 +80,7 @@ export function CreateProject(props: any) {
                                     <label htmlFor="color">Project color</label>
                                     <input type="color" name="color" required />
 
-                                    <Button type="submit" color="primary">Create project</Button>
+                                    <Button type="submit" color="primary" onPress={onclose}>Create project</Button>
                                 </Form>
                             </ModalBody>
                         </>

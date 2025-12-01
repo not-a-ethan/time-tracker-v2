@@ -13,6 +13,7 @@ import { Skeleton } from "@heroui/skeleton";
 
 import { now, getLocalTimeZone } from "@internationalized/date";
 
+import { getAPI } from "@/helpers/getAPI";
 import { isoToUnixEpoch } from "@/helpers/isoToUnix";
 
 import { DatabaseProjectsTable } from "@/type";
@@ -22,6 +23,8 @@ export function CreateTimeItem(props: any) {
     
     const [currentlyTiming, setCurrentlyTiming] = useState<boolean>(false);
     const [currentId, setCurrentId] = useState<number>(-1);
+
+    const { currentlyRunningJSON, currentError, currentLoading } = getAPI("../api/timeEntry/dashboard", ["currentlyRunningJSON", "currentError", "currentLoading"])
 
     const { onOpen, isOpen, onOpenChange } = useDisclosure();
 
