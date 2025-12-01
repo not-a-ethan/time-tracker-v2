@@ -1,16 +1,16 @@
 import { isTimeOwner } from "./isOwner";
 import { sql } from "@/utils/postgres";
 
-import { DatabaseTimeEntriesTable } from "@/type";
+import { DatabasetimeEntriesTable } from "@/type";
 
-export async function getTimeInfo(userId: number, timeEntryId: number): Promise<DatabaseTimeEntriesTable> {
+export async function getTimeInfo(userId: number, timeEntryId: number): Promise<DatabasetimeEntriesTable> {
     if (Number.isNaN(userId) || Number.isNaN(timeEntryId) || userId <= 0 || timeEntryId <= 0) {
         return {
             "id": -1,
-            "projectId": -1,
+            "projectid": -1,
             "name": "",
-            "startTime": -1,
-            "endTime": -1,
+            "starttime": -1,
+            "endtime": -1,
             "owner": -1
         };
     };
@@ -18,16 +18,16 @@ export async function getTimeInfo(userId: number, timeEntryId: number): Promise<
     if (!(await isTimeOwner(userId, timeEntryId))) {
         return {
             "id": -1,
-            "projectId": -1,
+            "projectid": -1,
             "name": "",
-            "startTime": -1,
-            "endTime": -1,
+            "starttime": -1,
+            "endtime": -1,
             "owner": -1
         }; 
     };
 
     try {
-        const query: DatabaseTimeEntriesTable[] = await sql`SELECT * FROM timeEntries WHERE id=${timeEntryId};`;
+        const query: DatabasetimeEntriesTable[] = await sql`SELECT * FROM timeentries WHERE id=${timeEntryId};`;
 
         return query[0];
     } catch (e) {
@@ -35,10 +35,10 @@ export async function getTimeInfo(userId: number, timeEntryId: number): Promise<
 
         return {
             "id": -1,
-            "projectId": -1,
+            "projectid": -1,
             "name": "",
-            "startTime": -1,
-            "endTime": -1,
+            "starttime": -1,
+            "endtime": -1,
             "owner": -1
         };
     };

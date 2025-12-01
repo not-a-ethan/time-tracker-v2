@@ -1,14 +1,19 @@
 import { sql } from "@/utils/postgres";
 
-import { DatabaseTimeEntriesTable } from "@/type";
+import { DatabasetimeEntriesTable } from "@/type";
 
 export async function isTimeOwner(userId: number, timeEntryId: number): Promise<boolean> {
-    if (Number.isNaN(userId) || Number.isNaN(timeEntryId) || userId <= 0 || timeEntryId <= 0) {
+    if (!timeEntryId || Number.isNaN(userId) || Number.isNaN(timeEntryId) || userId <= 0 || timeEntryId <= 0) {
         return false;
     };
 
     try {
-        const query: DatabaseTimeEntriesTable[] = await sql`SELECT * FROM timeEntries WHERE id=${timeEntryId};`;
+        const query: DatabasetimeEntriesTable[] = await sql`SELECT * FROM timeentries WHERE id=${timeEntryId};`;
+        
+        if (query.length === 0) {
+            return false;
+        };
+
         const owner: number = query[0]["owner"];
 
         if (owner === userId) {

@@ -5,7 +5,7 @@ import { sql } from "@/utils/postgres";
 import { isProjectColaborator } from "@/helpers/project/isColaborator";
 import { isProjectOwner } from "@/helpers/project/isOwner";
 
-import { ApiAuth, DatabaseTimeEntriesTable } from "@/type";
+import { ApiAuth, DatabasetimeEntriesTable } from "@/type";
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
     const authStatus: ApiAuth = await apiAuthCheck(req);
@@ -24,7 +24,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 
     if (projectId === null || Number.isNaN(projectId)) {
         try {
-            const items: DatabaseTimeEntriesTable[] = await sql`SELECT * FROM timeEntries WHERE owner=${authStatus["userId"]};`;
+            const items: DatabasetimeEntriesTable[] = await sql`SELECT * FROM timeentries WHERE owner=${authStatus["userId"]};`;
 
             return NextResponse.json(
                 {
@@ -53,7 +53,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
         };
 
         try {
-            const items: DatabaseTimeEntriesTable[] = await sql`SELECT * FROM timeEntries WHERE projectId=${projectId};`;
+            const items: DatabasetimeEntriesTable[] = await sql`SELECT * FROM timeentries WHERE projectId=${projectId};`;
 
             return NextResponse.json(
                 {

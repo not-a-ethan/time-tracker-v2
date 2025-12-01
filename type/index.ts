@@ -12,12 +12,12 @@ export interface DatabaseProjectsTable {
     "collaborators": string
 };
 
-export interface DatabaseTimeEntriesTable {
+export interface DatabasetimeEntriesTable {
     "id": number,
-    "projectId": number,
+    "projectid": number,
     "name": string,
-    "startTime": number,
-    "endTime": number|null,
+    "starttime": number,
+    "endtime": number|null,
     "owner": number
 };
 

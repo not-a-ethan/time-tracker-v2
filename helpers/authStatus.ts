@@ -1,7 +1,6 @@
 import { NextRequest } from "next/server";
 
 import { getToken } from "next-auth/jwt";
-import { sql } from "@/utils/postgres";
 
 import { ApiAuth } from "@/type";
 

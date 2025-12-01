@@ -6,7 +6,7 @@ import { isTimeOwner } from "@/helpers/time/isOwner";
 import { isProjectOwner } from "@/helpers/project/isOwner";
 import { sql } from "@/utils/postgres";
 
-import { ApiAuth, DatabaseTimeEntriesTable } from "@/type";
+import { ApiAuth, DatabasetimeEntriesTable } from "@/type";
 
 export async function PUT(req: NextRequest): Promise<NextResponse> {
     const authStatus: ApiAuth = await apiAuthCheck(req);
@@ -21,13 +21,13 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
     };
 
     const body = await req.json();
-    const timeId: number|null = body["id"];
-    const newName: string|null = body["name"];
-    const newProject: number|null = body["project"];
-    const newStartTime: number|null = body["startTime"];
-    const newEndTime: number|null = body["endTime"];
+    const timeId: number|null|undefined = body["id"];
+    const newName: string|null|undefined = body["name"];
+    const newProject: number|null|undefined = body["project"];
+    const newStartTime: number|null|undefined = body["startTime"];
+    const newEndTime: number|null|undefined = body["endTime"];
 
-    if (timeId === null || Number.isNaN(timeId) || timeId <= 0) {
+    if (timeId === null || timeId === undefined || Number.isNaN(timeId) || timeId <= 0) {
         return NextResponse.json(
             {
                 "error": "You need a valid time id"
@@ -43,15 +43,15 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
         types.push("name");
     };
 
-    if (newProject !== null && !Number.isNaN(newProject) && newProject > 0) {
+    if (newProject !== null && newProject !== undefined && !Number.isNaN(newProject) && newProject > 0) {
         types.push("project");
     };
 
-    if (newStartTime !== null && !Number.isNaN(newStartTime) && newStartTime > 0) {
+    if (newStartTime !== null && newStartTime !== undefined && !Number.isNaN(newStartTime) && newStartTime > 0) {
         types.push("start");
     };
 
-    if (newEndTime !== null && !Number.isNaN(newEndTime) && newEndTime > 0) {
+    if (newEndTime !== null && newEndTime !== undefined && !Number.isNaN(newEndTime) && newEndTime > 0) {
         types.push("end");
     };
 
@@ -66,9 +66,9 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
 
     // VALIDATE user owns time entry
 
-    const timeEntryData: DatabaseTimeEntriesTable = await getTimeInfo(authStatus["userId"], timeId);
+    const timeEntryData: DatabasetimeEntriesTable = await getTimeInfo(authStatus["userId"], timeId);
 
-    if (!(isTimeOwner(authStatus["userId"], timeId) || isProjectOwner(authStatus["userId"], timeEntryData["projectId"]))) {
+    if (!(isTimeOwner(authStatus["userId"], timeId) || isProjectOwner(authStatus["userId"], timeEntryData["projectid"]))) {
         return NextResponse.json(
             {
                 "error": "You do not own the time entry or the project"
@@ -79,7 +79,7 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
 
     if (types.includes("name")) {
         try {
-            await sql`UPDATE timeEntries SET name=${newName} WHERE id=${timeId};`;
+            await sql`UPDATE timeentries SET name=${newName} WHERE id=${timeId};`;
         } catch (e) {
             console.error(e);
 
@@ -93,7 +93,7 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
     };
 
     if (types.includes("project")) {
-        if (newProject === null || Number.isNaN(newProject) || newProject <= 0) {
+        if (newProject === null || newProject === undefined|| Number.isNaN(newProject) || newProject <= 0) {
             return NextResponse.json(
                 {
                     "error": "You did not include a valid project id"
@@ -114,7 +114,7 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
 
         // Changes project
         try {
-            await sql`UPDATE timeEntries SET projectId=${newProject} WHERE id=${timeId};`;
+            await sql`UPDATE timeentries SET projectId=${newProject} WHERE id=${timeId};`;
         } catch (e) {
             console.error(e);
 
@@ -128,7 +128,7 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
     };
 
     if (types.includes("start")) {
-        if (newStartTime === null || Number.isNaN(newStartTime) || newStartTime <= 0) {
+        if (newStartTime === null || newStartTime === undefined || Number.isNaN(newStartTime) || newStartTime <= 0) {
             return NextResponse.json(
                 {
                     "error": "That is not a valid start time"
@@ -139,7 +139,7 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
 
         // Check that start time is before end time
         if (types.includes("end")) {
-            if (newEndTime === null || Number.isNaN(newEndTime) || newEndTime <= 0) {
+            if (newEndTime === null || newEndTime === undefined || Number.isNaN(newEndTime) || newEndTime <= 0) {
                 return NextResponse.json(
                     {
                         "error": "That is not a valid end time"
@@ -158,7 +158,7 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
             };
 
             try {
-                await sql`UPDATE timeEntries SET startTime=${newStartTime} WHERE id=${timeId};`;
+                await sql`UPDATE timeentries SET startTime=${newStartTime} WHERE id=${timeId};`;
             } catch (e) {
                 console.error(e);
 
@@ -170,7 +170,7 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
                 );
             };
         } else {
-            if (timeEntryData["endTime"] !== null && newStartTime >= timeEntryData["endTime"]) {
+            if (timeEntryData["endtime"] !== null && newStartTime >= timeEntryData["endtime"]) {
                 return NextResponse.json(
                     {
                         "error": "You cant make the start time after the end time. Name and project was changed and nothing else (if applicable)"
@@ -180,7 +180,7 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
             };
 
             try {
-                await sql`UPDATE timeEntries SET startTime=${newStartTime} WHERE id=${timeId};`;
+                await sql`UPDATE timeentries SET startTime=${newStartTime} WHERE id=${timeId};`;
             } catch (e) {
                 return NextResponse.json(
                     {
@@ -193,7 +193,7 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
     };
 
     if (types.includes("end")) {
-        if (newEndTime === null || Number.isNaN(newEndTime) || newEndTime <= 0) {
+        if (newEndTime === null || newEndTime === undefined || Number.isNaN(newEndTime) || newEndTime <= 0) {
             return NextResponse.json(
                 {
                     "error": "That is not a valid end time"
@@ -203,7 +203,7 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
         };
 
         if (types.includes("start")) {
-            if (newStartTime === null || Number.isNaN(newStartTime) || newStartTime <= 0) {
+            if (newStartTime === null || newStartTime === undefined || Number.isNaN(newStartTime) || newStartTime <= 0) {
                 return NextResponse.json(
                     {
                         "error": "That is not a valid start time"
@@ -222,7 +222,7 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
             };
 
             try {
-                await sql`UPDATE timeEntries SET endTime=${newEndTime} WHERE id=${timeId};`;
+                await sql`UPDATE timeentries SET endTime=${newEndTime} WHERE id=${timeId};`;
             } catch (e) {
                 return NextResponse.json(
                     {
@@ -232,7 +232,7 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
                 );
             };
         } else {
-            if (timeEntryData["startTime"] >= newEndTime) {
+            if (timeEntryData["starttime"] >= newEndTime) {
                 return NextResponse.json(
                     {
                         "error": "The end time needs to be after the start time. Everything else was changed (if applicable)."
@@ -242,7 +242,7 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
             };
 
             try {
-                await sql`UPDATE timeEntries SET endTime=${newEndTime} WHERE id=${timeId};`;
+                await sql`UPDATE timeentries SET endtime=${newEndTime} WHERE id=${timeId};`;
             } catch (e) {
                 console.error(e);
 

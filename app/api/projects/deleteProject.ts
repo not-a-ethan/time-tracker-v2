@@ -43,7 +43,7 @@ export async function DELETE(req: NextRequest): Promise<NextResponse> {
     // Delete time entries for project
 
     try {
-        await sql`DELETE FROM timeEntries WHERE projectId=${id};`;
+        await sql`DELETE FROM timeentries WHERE projectId=${id};`;
     } catch (e) {
         console.error(e);
 

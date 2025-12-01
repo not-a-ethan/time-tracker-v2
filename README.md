@@ -37,12 +37,12 @@ CREATE TABLE "projects" (
 #### Time Entry table
 
 ```sql
-CREATE TABLE "timeEntries" (
-  "id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "timeEntries_id_seq"),
-  "projectId" integer NOT NULL,
+CREATE TABLE "timeentries" (
+  "id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "timeentries_id_seq"),
+  "projectid" integer NOT NULL,
   "name" text NOT NULL,
-  "startTime" integer NOT NULL,
-  "endTime" integer,
+  "starttime" integer NOT NULL,
+  "endtime" integer,
   "owner" integer NOT NULL
 );
 ```

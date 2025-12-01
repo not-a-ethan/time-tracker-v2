@@ -12,6 +12,8 @@ export async function accountExists(githubId: number): Promise<boolean> {
     try {
         users = await sql`SELECT * FROM users WHERE id=${githubId};`;
     } catch (e) {
+        console.error(e);
+
         return true;
     };
 

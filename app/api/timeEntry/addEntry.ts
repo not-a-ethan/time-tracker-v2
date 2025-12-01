@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { apiAuthCheck } from "@/helpers/authStatus";
 import { sql } from "@/utils/postgres";
 
-import { ApiAuth } from "@/type";
+import { ApiAuth, DatabasetimeEntriesTable } from "@/type";
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
     const authStatus: ApiAuth = await apiAuthCheck(req);
@@ -18,12 +18,12 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     };
 
     const body = await req.json();
-    const name: string|null = body["name"];
-    const project: number|null = body["project"];
-    const startTime: number|null = body["start"];
-    const endTime: number|null = body["end"];
+    const name: string|null|undefined = body["name"];
+    const project: number|null|undefined = body["project"];
+    const startTime: number|null|undefined = body["start"];
+    const endTime: number|null|undefined = body["end"];
 
-    if (name === null || !name || name.trim().length === 0) {
+    if (name === null || name === undefined || !name || name.trim().length === 0) {
         return NextResponse.json(
             {
                 "error": "You need a valid name"
@@ -32,7 +32,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         );
     };
 
-    if (project === null || !project || Number.isNaN(project) || project <= 0) {
+    if (project === null || project === undefined || !project || Number.isNaN(project) || project <= 0) {
         return NextResponse.json(
             {
                 "error": "You need a valid project"
@@ -41,7 +41,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         );
     };
 
-    if (startTime == null || !startTime || Number.isNaN(startTime) || project <= 0) {
+    if (startTime === null || startTime === undefined || !startTime || Number.isNaN(startTime) || startTime <= 0) {
         return NextResponse.json(
             {
                 "error": "You need a valid start time"
@@ -51,7 +51,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     };
 
     // End time can be null. That means the current item is current.
-    if (endTime !== null && (Number.isNaN(endTime) || endTime <= 0)) {
+    if ((endTime !== null && endTime !== undefined) && (Number.isNaN(endTime) || endTime <= 0)) {
         return NextResponse.json(
             {
                 "error": "You need a valid end time"
@@ -60,9 +60,9 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         );
     };
 
-    if (endTime === null) {
+    if (endTime === null || endTime === undefined) {
         try {
-            await sql`INSERT INTO timeEntries (projectId, name, startTime, owner) VALUES (${project}, ${name}, ${startTime}, ${authStatus["userId"]});`;
+            await sql`INSERT INTO timeentries (projectid, name, starttime, owner) VALUES (${project}, ${name}, ${startTime}, ${authStatus["userId"]});`;
         } catch (e) {
             console.error(e);
 
@@ -75,7 +75,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         };
     } else {
         try {
-            await sql`INSERT INTO timeEntries (projectId, name, startTime, endTime, owner) VALUES (${project}, ${name}, ${startTime}, ${endTime}, ${authStatus["userId"]});`;
+            await sql`INSERT INTO timeentries (projectid, name, starttime, endtime, owner) VALUES (${project}, ${name}, ${startTime}, ${endTime}, ${authStatus["userId"]});`;
         } catch (e) {
             console.error(e);
 
@@ -88,8 +88,13 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         };
     };
 
+    const timeInfo: DatabasetimeEntriesTable[] = await sql`SELECT * FROM timeentries WHERE owner=${authStatus["userId"]} AND starttime=${startTime};`;
+    const id: number = timeInfo[0]["id"];
+
     return NextResponse.json(
-        {},
+        {
+            "id": id
+        },
         { status: 200 }
     );
 };

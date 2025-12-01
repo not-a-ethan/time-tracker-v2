@@ -18,11 +18,11 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     };
 
     const body = await req.json();
-    const name: string|null = body["name"];
-    const description: string|null = body["description"];
-    const color: string|null = body["color"];
+    const name: string|null|undefined = body["name"];
+    const description: string|null|undefined = body["description"];
+    const color: string|null|undefined = body["color"];
 
-    if (name === null || name.trim().length === 0) {
+    if (name === null || name === undefined || name.trim().length === 0) {
         return NextResponse.json(
             {
                 "error": "Projects cant be nameless"
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         );
     };
 
-    if (color === null || color.trim().length === 0) {
+    if (color === null || color === undefined || color.trim().length === 0) {
         return NextResponse.json(
             {
                 "error": "Projects need a color"
@@ -40,7 +40,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         );
     };
 
-    if (description !== null) {
+    if (description !== null && description !== undefined) {
         try {
             await sql`INSERT INTO projects (name, description, color, owner, collaborators) VALUES (${name}, ${description}, ${color}, ${authStatus["userId"]}, ${authStatus["userId"]});`;
         } catch (e) {
