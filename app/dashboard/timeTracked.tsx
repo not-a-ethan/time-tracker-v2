@@ -13,6 +13,8 @@ import { getAPI } from "@/helpers/getAPI";
 
 import { DatabaseProjectsTable, DatabasetimeEntriesTable } from "@/type";
 
+import styles from "../styles/dashboard/graph.module.css";
+
 Chart.register(
   CategoryScale,
   LinearScale,
@@ -49,7 +51,7 @@ export function TimeChart(props: any) {
             setCurrentProject(Number(projects[0]["id"]));
         } else {
             setCurrentProject(-1);
-        }
+        };
     };
 
     if (jsonLoading) {
@@ -151,7 +153,7 @@ export function TimeChart(props: any) {
                     data: Object.values(days).reverse(),
                     fill: true,
                     borderColor: "rgba(255, 255, 255)",
-                    tension: 0.1
+                    tension: .5
                 }
             ]
         };
@@ -165,15 +167,15 @@ export function TimeChart(props: any) {
         };
 
         return (
-            <>
-                <Select name="project" label="Project" onSelectionChange={projectChange}>
+            <span className={`${styles.main}`}>
+                <Select name="project" label="Project" onSelectionChange={projectChange} className={`${styles.projectSelecter}`}>
                     {projects.map((project: DatabaseProjectsTable) => (
                         <SelectItem key={project.id}>{project.name}</SelectItem>
                     ))}
                 </Select>
 
                 <Line data={data} options={options} />
-            </>
+            </span>
         );
     };
 

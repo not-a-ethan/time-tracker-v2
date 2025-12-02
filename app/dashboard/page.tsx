@@ -7,6 +7,7 @@ import { useSession } from "next-auth/react";
 import { CreateTimer } from "./createTimer";
 import { CreateProject } from "./createProject";
 import { TimeChart } from "./timeTracked";
+import { CreateTimeItem } from "./createItem";
 
 import { getAPI } from "@/helpers/getAPI";
 
@@ -36,6 +37,8 @@ export default function Dashboard() {
 
                 <CreateTimer skelton="true" />
 
+                <CreateTimeItem skeleton="true" />
+
                 <CreateProject skelton="true" />
             </>
         );
@@ -47,6 +50,8 @@ export default function Dashboard() {
                 <h1>Dashboard</h1>
 
                 <CreateTimer skeleton="true" />
+
+                <CreateTimeItem skeleton="true" />
 
                 <CreateProject skeleton="true" />
             </>
@@ -61,7 +66,12 @@ export default function Dashboard() {
 
             <CreateTimer projects={projects} />
 
+            <CreateTimeItem projects={projects} />
+
             <CreateProject />
+
+            <br />
+            <br />
 
             <TimeChart projects={projects} />
         </>

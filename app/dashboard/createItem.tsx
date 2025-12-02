@@ -13,6 +13,8 @@ import { isoToUnixEpoch } from "@/helpers/isoToUnix";
 
 import { DatabaseProjectsTable } from "@/type";
 
+import styles from "../styles/dashboard/newEntry.module.css";
+
 export function CreateTimeItem(props: any) {
     const projects: DatabaseProjectsTable[] = props.projects;
 
@@ -98,8 +100,10 @@ export function CreateTimeItem(props: any) {
                                 <Form onSubmit={createEntry}>
                                     <Input type="text" name="name" label="Title of this activity" isRequired />
 
-                                    <DatePicker name="startTime" showMonthAndYearPickers label="Start time" isReadOnly />
-                                    <DatePicker name="endTime" showMonthAndYearPickers label="End time" isReadOnly />
+                                    <span className={`${styles.dateGrid}`}>
+                                        <DatePicker name="startTime" showMonthAndYearPickers label="Start time" isRequired />
+                                        <DatePicker name="endTime" showMonthAndYearPickers label="End time" isRequired />
+                                    </span>
                                 
                                     <Select name="project" isRequired label="Project">
                                         {projects.map((project: DatabaseProjectsTable) => (

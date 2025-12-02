@@ -1,0 +1,16 @@
+.dateGrid {
+    display: grid;
+    gap: 5%;
+}
+
+.dateGrid > * {
+    grid-row: 1;
+}
+
+.dateGrid:first-child {
+    grid-column: 1;
+}
+
+.dateGrid:last-child {
+    grid-column: 2;
+}

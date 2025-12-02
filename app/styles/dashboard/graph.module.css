@@ -1,0 +1,11 @@
+.main {
+    display: block;
+
+    width: 90vw;
+
+    margin: 0 auto;
+}
+
+.projectSelecter { 
+    width: 15vw;
+}
