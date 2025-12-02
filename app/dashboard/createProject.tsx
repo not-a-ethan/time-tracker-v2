@@ -39,7 +39,7 @@ export function CreateProject(props: any) {
                 error = true;
             };
 
-            res.json();
+            return res.json();
         })
         .then((json: any) => {
             if (error) {

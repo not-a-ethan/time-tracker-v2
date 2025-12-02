@@ -22,7 +22,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     const searchParams = req.nextUrl.searchParams;
     const projectId: number|null|undefined = Number(searchParams.get("projectId"));
 
-    if (projectId === null || projectId === undefined || Number.isNaN(projectId)) {
+    if (projectId === null || projectId === undefined || Number.isNaN(projectId) || projectId === 0) {
         try {
             const items: DatabasetimeEntriesTable[] = await sql`SELECT * FROM timeentries WHERE owner=${authStatus["userId"]};`;
 

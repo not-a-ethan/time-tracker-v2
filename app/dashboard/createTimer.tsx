@@ -97,7 +97,7 @@ export function CreateTimer(props: any) {
                 error = true;
             };
 
-            res.json();
+            return res.json();
         })
         .then((json: any) => {
             setCurrentId(-1);
@@ -130,7 +130,7 @@ export function CreateTimer(props: any) {
                 error = true;
             };
 
-            res.json();
+            return res.json();
         })
         .then((json: any) => {
             if (error) {
