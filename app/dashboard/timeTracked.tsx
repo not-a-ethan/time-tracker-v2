@@ -101,7 +101,8 @@ export function TimeChart(props: any) {
             );
         };
 
-        const today = Date.now();
+        const today = new Date();
+        const end = (Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()) / 1000);
 
         const days = {
             "0": 0,
@@ -122,38 +123,48 @@ export function TimeChart(props: any) {
             
             const date = new Date(thisEntry.starttime * 1000);
 
-            const diffDays = Math.floor(Math.abs((+date / 1000) - (today / 1000)) / 86400) // 86,400 is the number of seconds in a day
+            const start = (Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) / 1000);
+            
+            //const diffDays = Math.floor(Math.abs((+date / 1000) - (today / 1000)) / 86400) // 86,400 is the number of seconds in a day
+            const diffDays = Math.abs((start - end) / 86400);
 
             if (diffDays >= 7) {
                 break;
             };
 
             if (diffDays === 0) {
-                days["0"] = days["0"] + (thisEntry.endtime - thisEntry.starttime);
+                days["0"] = days["0"] + (thisEntry.endtime - thisEntry.starttime) / 60;
             } else if (diffDays === 1) {
-                days["1"] = days["1"] + (thisEntry.endtime - thisEntry.starttime);
+                days["1"] = days["1"] + (thisEntry.endtime - thisEntry.starttime) / 60;
             } else if (diffDays === 2) {
-                days["2"] = days["2"] + (thisEntry.endtime - thisEntry.starttime);
+                days["2"] = days["2"] + (thisEntry.endtime - thisEntry.starttime) / 60;
             } else if (diffDays === 3) {
-                days["3"] = days["3"] + (thisEntry.endtime - thisEntry.starttime);
+                days["3"] = days["3"] + (thisEntry.endtime - thisEntry.starttime) / 60;
             } else if (diffDays === 4) {
-                days["4"] = days["4"] + (thisEntry.endtime - thisEntry.starttime);
+                days["4"] = days["4"] + (thisEntry.endtime - thisEntry.starttime) / 60;
             } else if (diffDays === 5) {
-                days["5"] = days["5"] + (thisEntry.endtime - thisEntry.starttime);
+                days["5"] = days["5"] + (thisEntry.endtime - thisEntry.starttime) / 60;
             } else if (diffDays === 6) {
-                days["6"] = days["6"] + (thisEntry.endtime - thisEntry.starttime);
+                days["6"] = days["6"] + (thisEntry.endtime - thisEntry.starttime) / 60;
             };
+        };
+
+        const dates: string[] = [];
+
+        for (let i = 0; i < 7; i++) {
+            dates.push(`${today.getMonth()}-${today.getDate() - 1}-${today.getFullYear()}`);
+            today.setDate(today.getDate() - 1);
         };
         
         const data = {
-            labels: ["Today", "-1", "-2", "-3", "-4", "-5", "-6"].reverse(),
+            labels: dates.reverse(),
             datasets: [
                 {
-                    label: "Time tracked",
-                    data: Object.values(days).reverse(),
+                    label: "Minutes Tracked",
+                    data: Object.values(days).reverse(), // Array of minute values.
                     fill: true,
                     borderColor: "rgba(255, 255, 255)",
-                    tension: .5
+                    tension: .4
                 }
             ]
         };
