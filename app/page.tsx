@@ -1,4 +1,6 @@
-'use client';
+"use client";
+
+import { Link } from "@heroui/link";
 
 export default function Home() {
   return (
@@ -6,6 +8,8 @@ export default function Home() {
       <h1>Time Tracker V2</h1>
 
       <p>A time tracker is a program that keeps track of how much time you spend on diffrent activities.</p>
+
+      <p>To view the project visit <Link href="/dashboard">/dashboard</Link></p>
     </>
   );
 };
