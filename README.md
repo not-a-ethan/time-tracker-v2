@@ -46,3 +46,19 @@ CREATE TABLE "timeentries" (
   "owner" integer NOT NULL
 );
 ```
+
+### Envirment varibles
+
+```env
+GITHUB_ID=<GH OAuth app id>
+GITHUB_SECRET=<GH OAuth app secret>
+
+NEXTAUTH_URL=<URL of deployed app (including protocal)>
+AUTH_SECRET=<See https://next-auth.js.org/configuration/options#nextauth_secret>
+
+PGHost=<PostgreSQL host>
+PGPORT=5432
+PGDATABASE=<PostgreSQL databse>
+PGUSER=<PostgreSQL user>
+PGPASSWORD=<PostgreSQL user password>
+```
