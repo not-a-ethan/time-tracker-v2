@@ -30,8 +30,10 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
     };
 
     try {
-        await sql`UPDATE users SET name=${newName} WHERE githubId=${authStatus["userId"]};`;
+        await sql`UPDATE users SET name=${newName} WHERE id=${authStatus["userId"]};`;
     } catch (e) {
+        console.error(e);
+
         return NextResponse.json(
             {
                 "error": "Something went wrong trying to change name"
