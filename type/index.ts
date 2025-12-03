@@ -5,7 +5,7 @@ export interface DatabaseUserTable {
 
 export interface DatabaseProjectsTable {
     "id": number,
-    "name": number,
+    "name": string,
     "description": string|null,
     "color": string,
     "owner": number,

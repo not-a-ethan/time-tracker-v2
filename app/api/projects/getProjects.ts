@@ -20,7 +20,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     let collaberatorProjects: DatabaseProjectsTable[] = [];
 
     try {
-        collaberatorProjects = await sql`SELECT * FROM projects WHERE collaborators LIKE ${`%${authStatus["userId"]}%`}`;
+        collaberatorProjects = await sql`SELECT * FROM projects WHERE collaborators LIKE ${"%" + authStatus["userId"] + "%"}`;
     } catch (e) {
         console.error(e);
 
