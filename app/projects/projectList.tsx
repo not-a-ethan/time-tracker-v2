@@ -16,7 +16,7 @@ export function ProjectList(props: any){
                 <Table>
                     <TableHeader>
                         <TableColumn>Name</TableColumn>
-                        <TableColumn>Descirption</TableColumn>
+                        <TableColumn>Description</TableColumn>
                         <TableColumn>Actions</TableColumn>
                     </TableHeader>
 
@@ -36,7 +36,7 @@ export function ProjectList(props: any){
         <Table>
             <TableHeader>
                 <TableColumn>Name</TableColumn>
-                <TableColumn>Descirption</TableColumn>
+                <TableColumn>Description</TableColumn>
                 <TableColumn>Actions</TableColumn>
             </TableHeader>
 

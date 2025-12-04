@@ -9,6 +9,8 @@ import { Form } from "@heroui/form";
 import { Input } from "@heroui/input";
 import { Select, SelectItem } from "@heroui/select";
 
+import { EditIcon, DeleteIcon } from "../components/icons";
+
 import { DatabaseProjectsTable } from "@/type";
 
 export function EditButton(props: any) {
@@ -104,7 +106,9 @@ export function EditButton(props: any) {
 
     return (
         <>
-            <Button isIconOnly onPress={onOpen}>EDIT</Button>
+            <Button isIconOnly onPress={onOpen}>
+                <EditIcon />
+            </Button>
 
             <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
                 <ModalContent>
@@ -195,7 +199,9 @@ export function DeleteButton(props: any) {
 
     return (
         <>
-            <Button isIconOnly color="danger" onPress={onOpen}>DELETE</Button>
+            <Button isIconOnly color="danger" onPress={onOpen}>
+                <DeleteIcon />
+            </Button>
 
             <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
                 <ModalContent>
