@@ -4,6 +4,8 @@ import { Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, Navba
 import { Link } from "@heroui/link";
 import { Button } from "@heroui/button";
 
+
+
 export function Nav() {
     return (
         <Navbar>
@@ -26,7 +28,7 @@ export function Nav() {
             </NavbarContent>
 
             <NavbarContent justify="end">
-                <Button onPress={() => {window.location.herf="/api/auth/signin"}}>Signin/Signup</Button>
+                <Button as={Link} href="/api/auth/signin">Signin/Signup</Button>
             </NavbarContent>
         </Navbar>
     );

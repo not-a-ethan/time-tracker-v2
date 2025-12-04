@@ -2,6 +2,7 @@ import "./styles/global.css";
 import { Viewport } from "next";
 
 import { Providers } from "./providers";
+import { Nav } from "./components/navbar";
 
 export const viewport: Viewport = {
   themeColor: [
@@ -20,6 +21,7 @@ export default function RootLayout({
       <head />
       <body>
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
+          <Nav />
           {children}
         </Providers>
       </body>
