@@ -19,3 +19,9 @@
         font-size: var(--text-lg);
     }
 }
+
+body {
+    width: 90vw;
+
+    margin: 0 auto
+}
