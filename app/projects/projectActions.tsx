@@ -19,6 +19,7 @@ export function EditButton(props: any) {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     
     const [editDesc, setEditDesc] = useState<boolean>(false);
+    const [editColor, setEditColor] = useState<boolean>(false);
 
     function editName(e: any) {
         e.preventDefault();
@@ -104,6 +105,49 @@ export function EditButton(props: any) {
         });
     };
 
+    function changeColor(e: any) {
+        e.preventDefault();
+
+        const data = Object.fromEntries(new FormData(e.currentTarget));
+
+        const newColor: string = data["color"].toString();
+
+        let error: boolean = false;
+
+        fetch("../api/projects", {
+            method: "PUT",
+            body: JSON.stringify({
+                id: project["id"],
+                color: newColor
+            })
+        })
+        .then(res => {
+            if (!res.ok) {
+                error = true;
+            };
+
+            return res.json();
+        })
+        .then((json: any) => {
+            if (error) {
+                addToast({
+                    "color": "danger",
+                    "title": "Something went wrong changing the color",
+                    "description": json["error"]
+                });
+            };
+        })
+        .catch(e => {
+            console.error(e);
+
+            addToast({
+                color: "danger",
+                title: "Something went wrong changing the color",
+                description: "More info in developer console"
+            });
+        });
+    };
+
     return (
         <>
             <Button isIconOnly onPress={onOpen}>
@@ -115,8 +159,9 @@ export function EditButton(props: any) {
                     {(onclose) => (
                         <>
                             <Select label="What do you want to edit?" defaultSelectedKeys={["name"]} selectionMode="single">
-                                <SelectItem key="name" onClick={() => {setEditDesc(false)}}>Name</SelectItem>
-                                <SelectItem key="desc" onClick={() => {setEditDesc(true)}}>Description</SelectItem>
+                                <SelectItem key="name" onClick={() => {setEditDesc(false);setEditColor(false)}}>Name</SelectItem>
+                                <SelectItem key="desc" onClick={() => {setEditDesc(true);setEditColor(false)}}>Description</SelectItem>
+                                <SelectItem key="color" onClick={() => {setEditColor(true);setEditDesc(false)}}>Color</SelectItem>
                             </Select>
 
                             {editDesc ? (
@@ -130,6 +175,22 @@ export function EditButton(props: any) {
                                             <Input type="text" name="description" isRequired defaultValue={project.description || ""} />
 
                                             <Button color="primary" type="submit" onPress={onclose}>Change Description</Button>
+                                        </Form>
+                                    </ModalBody>
+                                </>
+                            ) : (editColor ? (
+                                <>
+                                    <ModalHeader>
+                                        <h1>Edit Project Color</h1>
+                                    </ModalHeader>
+
+                                    <ModalBody>
+                                        <Form onSubmit={changeColor}>
+                                            <label htmlFor="color">New color</label>
+
+                                            <input type="color" name="color" required />
+
+                                            <Button type="submit" onPress={onclose} color="primary">Change Color</Button>
                                         </Form>
                                     </ModalBody>
                                 </>
@@ -147,7 +208,7 @@ export function EditButton(props: any) {
                                         </Form>
                                     </ModalBody>
                                 </>
-                            )}
+                            ))}
                         </>
                     )}
                 </ModalContent>

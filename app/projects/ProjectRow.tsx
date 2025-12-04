@@ -12,7 +12,7 @@ export function ProjectRows(props: any) {
     return (
         <TableBody>
             {projects.map((project: DatabaseProjectsTable) => (
-                <TableRow key={project.id}>
+                <TableRow key={project.id} style={{backgroundColor: project["color"]}}>
                     <TableCell>{project.name}</TableCell>
                     <TableCell>{project.description}</TableCell>
                     <TableCell>
