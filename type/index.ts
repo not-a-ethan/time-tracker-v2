@@ -31,3 +31,11 @@ export interface ApiAuth {
     "auth": boolean,
     "userId": number
 };
+
+export interface TimeEntryFilters {
+    project: string[],
+    time: {
+        start: number,
+        end: number
+    }
+};

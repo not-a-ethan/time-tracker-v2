@@ -1,0 +1,19 @@
+.component {
+    display: grid;
+    
+    gap: 2vw;
+
+    width: 30vw;
+}
+
+.project {
+    width: 15vw;
+
+    grid-column: 1;
+}
+
+.date {
+    width: 20vw;
+
+    grid-column: 2;
+}

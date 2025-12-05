@@ -6,10 +6,12 @@ import { DateRangePicker } from "@heroui/date-picker";
 
 import { getAPI } from "@/helpers/getAPI";
 
-import { DatabaseProjectsTable, DatabasetimeEntriesTable } from "@/type";
+import { DatabaseProjectsTable, TimeEntryFilters } from "@/type";
+
+import styles from "../styles/timeEntries/filters.module.css";
 
 export function Filters(props: any) {
-    const filters = props.filters;
+    const filters: TimeEntryFilters = props.filters;
     const setFilters = props.setFilters;
 
     const { json, jsonError, jsonLoading } = getAPI("../api/projects", ["json", "jsonError", "jsonLoading"]);
@@ -17,12 +19,12 @@ export function Filters(props: any) {
     if (jsonLoading) {
         return (
             <>
-                <Select>
-                    <Skeleton>
-                        <SelectItem>Some amazing filter</SelectItem>
-                        <SelectItem>Another amazing filter</SelectItem>
-                    </Skeleton>
-                </Select>
+                <Skeleton>
+                    <Select>
+                        <SelectItem key="one">Some amazing filter</SelectItem>
+                        <SelectItem key="two">Another amazing filter</SelectItem>
+                    </Select>
+                </Skeleton>
 
                 <Skeleton>
                     <DateRangePicker label="Time range" showMonthAndYearPickers />
@@ -32,16 +34,18 @@ export function Filters(props: any) {
     };
 
     if (jsonError) {
-        console.error(jsonError["error"])
+        console.error(jsonError["error"]);
 
         return (
             <>
-                <Select>
-                    <Skeleton>
-                        <SelectItem>Some amazing filter</SelectItem>
-                        <SelectItem>Another amazing filter</SelectItem>
-                    </Skeleton>
-                </Select>
+                <Skeleton>
+                    <Select>
+                    
+                        <SelectItem key="one">Some amazing filter</SelectItem>
+                        <SelectItem key="two">Another amazing filter</SelectItem>
+                    
+                    </Select>
+                </Skeleton>
 
                 <Skeleton>
                     <DateRangePicker label="Time range" showMonthAndYearPickers />
@@ -50,37 +54,39 @@ export function Filters(props: any) {
         );
     };
 
-    return (
-        <>
-            <p>hellow</p>
-        </>
-    );
-
     const projects: DatabaseProjectsTable[] = json["projects"];
 
     function updateProjectFilter(e: any) {
-        e.preventDefault();
+        const vals: string[] = e.target.value.split(",");
 
-        console.log(e);
+        const newFilters = filters;
 
-        try {
-            const data = Object.fromEntries(new FormData(e.currentTarget));
-            
-            console.log(data);
-        } catch (e) {
-            console.error(e);
-        };
+        newFilters.project = vals;
+
+        setFilters(newFilters);
+    };
+
+    function updateTimeFilter(e: any) {
+        const start: Date = new Date(e.start.year, e.start.month, e.start.day);
+        const end: Date = new Date(e.end.year, e.end.month, e.end.day);
+
+        const newFilters = filters;
+
+        newFilters.time.start = Date.parse(start.toString());
+        newFilters.time.end = Date.parse(end.toString());
+
+        setFilters(newFilters);
     };
 
     return (
-        <>
-            <Select onChange={updateProjectFilter} selectionMode="multiple">
+        <div className={`${styles.component}`}>
+            <Select onChange={updateProjectFilter} selectionMode="multiple" label="Projects" className={`${styles.project}`}>
                 {projects.map((project: DatabaseProjectsTable) => (
                     <SelectItem key={project["id"]}>{project["name"]}</SelectItem>
                 ))}
             </Select>
 
-            <DateRangePicker label="Time Range" showMonthAndYearPickers />
-        </>
+            <DateRangePicker label="Time Range" showMonthAndYearPickers  onChange={updateTimeFilter} className={`${styles.date}`} />
+        </div>
     );
 };
