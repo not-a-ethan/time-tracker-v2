@@ -1,6 +1,7 @@
 "use client";
 
 import { TableBody, TableRow, TableCell } from "@heroui/table";
+import { Link } from "@heroui/link";
 
 import { EditButton, DeleteButton } from "./projectActions";
 
@@ -18,7 +19,7 @@ export function ProjectRows(props: any) {
                     <TableCell>
                         <ul>
                             <li style={{color: project["color"]}} className={`${styles.projectListItem}`}>
-                                <span className={`${styles.projectName}`}>{project.name}</span>
+                                <Link className={`${styles.projectName}`} href={`./projects/${project["id"]}`}>{project.name}</Link>
                             </li>
                         </ul>
                     </TableCell>
