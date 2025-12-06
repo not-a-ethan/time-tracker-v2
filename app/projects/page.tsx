@@ -4,9 +4,6 @@ import { useRouter } from "next/navigation";
 
 import { useSession } from "next-auth/react";
 
-import { Table, TableBody, TableCell, TableRow } from "@heroui/table";
-import { Dropdown, DropdownItem } from "@heroui/dropdown";
-
 import { ProjectList } from "./projectList";
 
 import { getAPI } from "@/helpers/getAPI";
