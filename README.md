@@ -6,6 +6,10 @@ Remaking this project so it has more features + a more polished UX/UI
 
 V1: https://github.com/not-a-ethan/time-tracker
 
+___
+
+You can view a [video demo](/Demo.mp4).
+
 ## Dev
 
 ### Database
