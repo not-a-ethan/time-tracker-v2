@@ -3,21 +3,18 @@
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem } from "@heroui/navbar";
 import { Link } from "@heroui/link";
 import { Button } from "@heroui/button";
+import { ThemeSwitch } from "./themeSwitcher";
 
-
+import styles from "../styles/nav.module.css";
 
 export function Nav() {
     return (
         <Navbar>
             <NavbarBrand>
-                Time Tracker V2
+                <Link href="/" className={`${styles.name}`}>Time Tracker V2</Link>
             </NavbarBrand>
 
             <NavbarContent justify="center">
-                <NavbarItem>
-                    <Link href="/">Home</Link>
-                </NavbarItem>
-
                 <NavbarItem>
                     <Link href="/dashboard">Dashboard</Link>
                 </NavbarItem>
@@ -27,12 +24,18 @@ export function Nav() {
                 </NavbarItem>
 
                 <NavbarItem>
-                    <Link href="/timeEntries">Time entries</Link>
+                    <Link href="/timeEntries">Time Entries</Link>
                 </NavbarItem>
             </NavbarContent>
 
             <NavbarContent justify="end">
-                <Button as={Link} href="/api/auth/signin">Signin/Signup</Button>
+                <NavbarItem>
+                    <Button as={Link} href="/api/auth/signin">Signin/Signup</Button>
+                </NavbarItem>
+
+                <NavbarItem>
+                    <ThemeSwitch />
+                </NavbarItem>
             </NavbarContent>
         </Navbar>
     );

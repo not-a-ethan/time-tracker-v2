@@ -8,7 +8,7 @@ V1: https://github.com/not-a-ethan/time-tracker
 
 ## Dev
 
-### Databse
+### Database
 
 This project uses a PostgreSQL databse. Below is the quries to create all the tables.
 
