@@ -1,0 +1,13 @@
+.projectListItem {
+    list-style-type: disc;
+
+    font-size: x-large;
+
+    margin-left: 1.5vw;
+}
+
+.projectName {
+    color: hsl(var(--heroui-foreground));
+
+    font-size: medium;
+}
