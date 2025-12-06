@@ -25,6 +25,10 @@ export function Nav() {
                 <NavbarItem>
                     <Link href="/projects">Projects</Link>
                 </NavbarItem>
+
+                <NavbarItem>
+                    <Link href="/timeEntries">Time entries</Link>
+                </NavbarItem>
             </NavbarContent>
 
             <NavbarContent justify="end">

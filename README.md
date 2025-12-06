@@ -2,6 +2,8 @@
 
 A FOSS time tracker. This can be used to track how much time is spent on different activities.
 
+Remaking this project so it has more features + a more polished UX/UI
+
 V1: https://github.com/not-a-ethan/time-tracker
 
 ## Dev
