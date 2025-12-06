@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
 import { Filters } from "./filters";
+import { EntriesTable } from "./entriesTable";
 
 import { getAPI } from "@/helpers/getAPI";
 
@@ -16,7 +17,7 @@ export default function TimeEntries() {
     const { data: session, status } = useSession();
     const router = useRouter();
 
-    const [filters, setFilters] = useState<TimeEntryFilters>({project: [], time: {start: 0, end: 20000000000}});
+    const [filters, setFilters] = useState<TimeEntryFilters>({project: [""], time: {start: 0, end: 20000000000}});
 
     const { json, jsonError, jsonLoading } = getAPI("../api/timeEntry", ["json", "jsonError", "jsonLoading"]);
 
@@ -52,6 +53,10 @@ export default function TimeEntries() {
             <h1>Time Entries</h1>
 
             <Filters filters={filters} setFilters={setFilters} />
+
+            <br />
+
+            <EntriesTable filters={filters} entries={timeEntries} />
         </>
     );
 };
