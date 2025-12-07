@@ -6,6 +6,8 @@ Remaking this project so it has more features + a more polished UX/UI
 
 V1: https://github.com/not-a-ethan/time-tracker
 
+The new features this week is everything exept the dashboard.
+
 ___
 
 You can view a [video demo](/Demo.mp4).

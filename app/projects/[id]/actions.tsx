@@ -36,6 +36,15 @@ export function Actions(props: any) {
         if (type === "name") {
             const newName: string = data["newName"].toString();
 
+            if (!newName || newName.trim().length === 0) {
+                addToast({
+                    color: "warning",
+                    title: "You need a project name"
+                });
+
+                return;
+            };
+
             fetch("../../api/projects", {
                 method: "PUT",
                 body: JSON.stringify({
@@ -71,6 +80,15 @@ export function Actions(props: any) {
         } else if (type === "description") {
             const newDesc: string = data["description"].toString();
 
+            if (!newDesc || newDesc.trim().length === 0) {
+                addToast({
+                    color: "warning",
+                    title: "You need a project description"
+                });
+
+                return;
+            };
+
             fetch("../../api/projects", {
                 method: "PUT",
                 body: JSON.stringify({
@@ -105,6 +123,15 @@ export function Actions(props: any) {
             });
         } else if (type === "color") {
             const newColor: string = data["color"].toString();
+
+            if (!newColor || newColor.trim().length) {
+                addToast({
+                    color: "warning",
+                    title: "You need a project color"
+                });
+
+                return;
+            };
 
             fetch("../../api/projects", {
                 method: "PUT",

@@ -40,6 +40,46 @@ export function CreateTimeItem(props: any) {
 
         let error: boolean = false;
 
+        if (!name || name.trim().length === 0) {
+            addToast({
+                color: "warning",
+                title: "You need a valid name"
+            });
+
+            error = true;
+        };
+
+        if (!project || Number.isNaN(project) || project <= 0) {
+            addToast({
+                color: "warning",
+                title: "You need a valid project"
+            });
+
+            error = true;
+        };
+
+        if (!startTime || Number.isNaN(isoToUnixEpoch(startTime)) || isoToUnixEpoch(startTime) <= 0) {
+            addToast({
+                color: "warning",
+                title: "You need a valid start time"
+            });
+
+            error = true;
+        };
+
+        if (!startTime || Number.isNaN(isoToUnixEpoch(endTime)) || isoToUnixEpoch(endTime) <= 0) {
+            addToast({
+                color: "warning",
+                title: "You need a valid end time"
+            });
+
+            error = true;
+        };
+
+        if (error) {
+            return;
+        };
+
         fetch("../api/timeEntry", {
             method: "POST",
             body: JSON.stringify({

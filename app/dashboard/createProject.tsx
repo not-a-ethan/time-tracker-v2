@@ -27,6 +27,28 @@ export function CreateProject(props: any) {
 
         let error: boolean = false;
 
+        if (!name || name.trim().length === 0) {
+            addToast({
+                color: "warning",
+                title: "You need a project name"
+            });
+
+            error = true;
+        };
+
+        if (!color || color.trim().length === 0) {
+            addToast({
+                color: "warning",
+                title: "You need a project color"
+            });
+
+            error = true;
+        };
+
+        if (error) {
+            return;
+        };
+
         fetch(`../api/projects`, {
             method: "POST",
             body: JSON.stringify({

@@ -27,6 +27,15 @@ export function EditButton(props: any) {
         const data = Object.fromEntries(new FormData(e.currentTarget));
         const newName: string = data["name"].toString();
 
+        if (!newName || newName.trim().length === 0) {
+            addToast({
+                color: "warning",
+                title: "You need a valid name"
+            });
+
+            return;
+        };
+
         let error: boolean = false;
 
         fetch("../api/projects", {
@@ -68,6 +77,15 @@ export function EditButton(props: any) {
 
         const data = Object.fromEntries(new FormData(e.currentTarget));
         const newDesc: string = data["description"].toString();
+
+        if (!newDesc || newDesc.trim().length === 0) {
+            addToast({
+                color: "warning",
+                title: "You need a description",
+            });
+
+            return;
+        };
 
         let error: boolean = false;
 
@@ -111,6 +129,15 @@ export function EditButton(props: any) {
         const data = Object.fromEntries(new FormData(e.currentTarget));
 
         const newColor: string = data["color"].toString();
+
+        if (!newColor || newColor.trim().length === 0) {
+            addToast({
+                color: "warning",
+                title: "You need a project color"
+            });
+
+            return;
+        };
 
         let error: boolean = false;
 

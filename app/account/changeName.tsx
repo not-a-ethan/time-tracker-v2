@@ -13,6 +13,16 @@ export function ChangeName() {
 
         const data = Object.fromEntries(new FormData(e.currentTarget));
         const newName: string = data["name"].toString();
+
+        if (!newName || newName.trim().length === 0) {
+            addToast({
+                color: "warning",
+                title: "You need a valid name",
+            });
+
+            return;
+        };
+
         let error: boolean = false;
 
         fetch("../api/account", {
