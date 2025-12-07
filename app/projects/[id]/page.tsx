@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 
 import { ProjectTimeChart } from "./timeGraph";
 import { Actions } from "./actions";
+import { ProjectTimeEntries } from "./projectTimeEntries";
 
 import { getAPI } from "@/helpers/getAPI";
 
@@ -64,7 +65,13 @@ export default function ManageProject({ params }: { params: Promise<{id: string}
 
             <p>{projectInfo["description"]}</p>
 
+            <ProjectTimeEntries project={projectInfo} />
+
+            <br />
+
             <ProjectTimeChart project={projectInfo} />
+
+            <br />
 
             <Actions project={projectInfo} />
         </>
