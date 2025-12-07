@@ -13,6 +13,8 @@ import { getAPI } from "@/helpers/getAPI";
 
 import { DatabaseProjectsTable } from "@/type";
 
+import styles from "../../styles/projects/[id]/page.module.css";
+
 export default function ManageProject({ params }: { params: Promise<{id: string}> }) {
     const { id } = use(params);
     
@@ -52,7 +54,13 @@ export default function ManageProject({ params }: { params: Promise<{id: string}
 
     return (
         <>
-            <h1>{projectInfo["name"]}</h1>
+            <h1>
+                <ul>
+                    <li style={{color: projectInfo["color"]}} className={`${styles.projectListItem}`}>
+                        <span className={`${styles.projectName}`}>{projectInfo["name"]}</span>
+                    </li>
+                </ul>
+            </h1>
 
             <p>{projectInfo["description"]}</p>
 
