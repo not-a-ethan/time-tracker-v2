@@ -140,6 +140,8 @@ export function ProjectTimeEntries(props: any) {
                 });
             });
         } else if (!editProject) {
+            // Edit times
+
             const startTime: string|null|undefined = data["start"].toString();
             const endTime: string|null|undefined = data["end"].toString();
 
@@ -156,6 +158,15 @@ export function ProjectTimeEntries(props: any) {
                 addToast({
                     color: "warning",
                     title: "You need a valid end time"
+                });
+
+                error = true;
+            };
+
+            if (startTime >= endTime) {
+                addToast({
+                    color: "warning",
+                    title: "The start time needs to be before the end time"
                 });
 
                 error = true;
@@ -180,7 +191,7 @@ export function ProjectTimeEntries(props: any) {
             fetch("../../api/timeEntry", {
                 method: "PUT",
                 body: JSON.stringify({
-                    "id":currentEntry["id"],
+                    "id": currentEntry["id"],
                     "startTime": startUnix,
                     "endTime": endUnix
                 })

@@ -40,9 +40,9 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         );
     };
 
-    if (description !== null && description !== undefined) {
+    if (description !== null && description !== undefined && description.trim().length !== 0) {
         try {
-            await sql`INSERT INTO projects (name, description, color, owner, collaborators) VALUES (${name}, ${description}, ${color}, ${authStatus["userId"]}, ${authStatus["userId"]});`;
+            await sql`INSERT INTO projects (name, description, color, owner, collaborators) VALUES (${name}, ${description.trim()}, ${color}, ${authStatus["userId"]}, ${authStatus["userId"]});`;
         } catch (e) {
             console.error(e);
 

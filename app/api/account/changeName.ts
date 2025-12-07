@@ -30,7 +30,7 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
     };
 
     try {
-        await sql`UPDATE users SET name=${newName} WHERE id=${authStatus["userId"]};`;
+        await sql`UPDATE users SET name=${newName.trim()} WHERE id=${authStatus["userId"]};`;
     } catch (e) {
         console.error(e);
 

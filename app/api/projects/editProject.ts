@@ -70,7 +70,7 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
 
     if (types.includes("name")) {
         try {
-            await sql`UPDATE projects SET name=${newName} WHERE id=${projectId};`;
+            await sql`UPDATE projects SET name=${newName?.trim()} WHERE id=${projectId};`;
         } catch (e) {
             return NextResponse.json(
                 {
@@ -83,7 +83,7 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
 
     if (types.includes("desc")) {
         try {
-            await sql`UPDATE projects SET description=${newDescription} WHERE id=${projectId};`;
+            await sql`UPDATE projects SET description=${newDescription?.trim()} WHERE id=${projectId};`;
         } catch (e) {
             return NextResponse.json(
                 {
@@ -95,7 +95,7 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
 
     if (types.includes("color")) {
         try {
-            await sql`UPDATE projects SET color=${newColor} WHERE id=${projectId};`;
+            await sql`UPDATE projects SET color=${newColor?.trim()} WHERE id=${projectId};`;
         } catch (e) {
             return NextResponse.json(
                 {

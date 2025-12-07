@@ -62,7 +62,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     if (endTime === null || endTime === undefined) {
         try {
-            await sql`INSERT INTO timeentries (projectid, name, starttime, owner) VALUES (${project}, ${name}, ${startTime}, ${authStatus["userId"]});`;
+            await sql`INSERT INTO timeentries (projectid, name, starttime, owner) VALUES (${project}, ${name.trim()}, ${startTime}, ${authStatus["userId"]});`;
         } catch (e) {
             console.error(e);
 

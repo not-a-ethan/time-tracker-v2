@@ -79,7 +79,7 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
 
     if (types.includes("name")) {
         try {
-            await sql`UPDATE timeentries SET name=${newName} WHERE id=${timeId};`;
+            await sql`UPDATE timeentries SET name=${newName?.trim()} WHERE id=${timeId};`;
         } catch (e) {
             console.error(e);
 
