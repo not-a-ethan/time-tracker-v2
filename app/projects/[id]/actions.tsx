@@ -10,6 +10,7 @@ import { Button } from "@heroui/button";
 import { Select, SelectItem } from "@heroui/select";
 import { Modal, ModalContent, ModalHeader, ModalBody, useDisclosure } from "@heroui/modal";
 
+import { AddCollaberator } from "./addCollabertor";
 import { DeleteIcon, EditIcon } from "@/app/components/icons";
 
 import { DatabaseProjectsTable } from "@/type";
@@ -17,6 +18,8 @@ import { addToast } from "@heroui/toast";
 
 export function Actions(props: any) {
     const project: DatabaseProjectsTable = props.project;
+    const session: any = props.session;
+    const userId: number = Number(session.userId);
 
     const router = useRouter();
 
@@ -199,6 +202,9 @@ export function Actions(props: any) {
         });
     };
 
+    console.log(project);
+    console.log(userId);
+
     return (
         <>
             <Button onPressStart={() => (setDelete(false))} onPress={onOpen}>
@@ -210,6 +216,14 @@ export function Actions(props: any) {
                 Delete
                 <DeleteIcon />
             </Button>
+
+            {project.owner === userId ? (
+                <>
+                    <AddCollaberator project={project} />
+                </>
+            ) : (
+                <></>
+            )}
 
             <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
                 <ModalContent>

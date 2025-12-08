@@ -73,7 +73,7 @@ export default function ManageProject({ params }: { params: Promise<{id: string}
 
             <br />
 
-            <Actions project={projectInfo} />
+            <Actions project={projectInfo} session={session} />
         </>
     );
 };

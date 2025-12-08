@@ -24,7 +24,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
         let collaberatorProjects: DatabaseProjectsTable[] = [];
 
         try {
-            collaberatorProjects = await sql`SELECT * FROM projects WHERE collaborators LIKE ${"%" + authStatus["userId"] + "%"}`;
+            collaberatorProjects = await sql`SELECT * FROM projects WHERE collaborators LIKE ${"%" + authStatus["userId"] + "%"};`;
         } catch (e) {
             console.error(e);
 
@@ -69,7 +69,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
             );
         };
 
-        if (project["owner"] !== authStatus["userId"] && project["collaborators"].split(",").includes(authStatus["userId"].toString())) {
+        if (project["owner"] !== authStatus["userId"] && !project["collaborators"].split(",").includes(authStatus["userId"].toString())) {
             return NextResponse.json(
                 {
                     "error": "You are not the owner or collaberator on the project"

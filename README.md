@@ -23,7 +23,7 @@ This project uses a PostgreSQL databse. Below is the quries to create all the ta
 ```sql
 CREATE TABLE "users" (
   "id" integer PRIMARY KEY,
-  "name" text NOT NULL
+  "name" text UNIQUE NOT NULL
 );
 ```
 
