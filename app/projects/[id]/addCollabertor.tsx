@@ -1,6 +1,5 @@
 "use client";
 
-import { Select, SelectItem } from "@heroui/select";
 import { Form } from "@heroui/form";
 import { Input } from "@heroui/input";
 import { addToast } from "@heroui/toast";

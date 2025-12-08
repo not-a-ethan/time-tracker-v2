@@ -201,10 +201,7 @@ export function Actions(props: any) {
             };
         });
     };
-
-    console.log(project);
-    console.log(userId);
-
+    
     return (
         <>
             <Button onPressStart={() => (setDelete(false))} onPress={onOpen}>
