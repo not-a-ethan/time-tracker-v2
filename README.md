@@ -10,7 +10,7 @@ The new features this week is everything exept the dashboard.
 
 ___
 
-You can view a [video demo](/Demo.mp4).
+You can view a [video demo](/Demo2.mp4).
 
 ## Dev
 
